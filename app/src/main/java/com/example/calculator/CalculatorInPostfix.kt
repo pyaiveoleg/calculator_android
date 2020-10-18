@@ -1,6 +1,7 @@
 package com.example.calculator
 
 import java.lang.Exception
+import kotlin.math.pow
 
 class CalculatorInPostfix {
     private val charParser = CharParser()
@@ -44,14 +45,17 @@ class CalculatorInPostfix {
 
     fun calculate(expression: String): Double {
         val stack = mutableListOf<Double>()
-        var currentNumber = 0
+        var currentNumber = 0.0
         var wasDigit = false
+        var decimalPlaceAfterDot = 1
+        var currentNumberIsNatural = true
+
         for ((index, currentSymbol) in expression.withIndex()) {
             when {
                 charParser.isOperator(currentSymbol) -> {
                     if (wasDigit) {
-                        stack.add(currentNumber.toDouble())
-                        currentNumber = 0
+                        stack.add(currentNumber)
+                        currentNumber = 0.0
                         wasDigit = false
                     }
                     val error = !calculateBinaryOperation(stack, currentSymbol)
@@ -61,23 +65,36 @@ class CalculatorInPostfix {
                 }
                 charParser.isDigit(currentSymbol) -> {
                     wasDigit = true
-                    currentNumber = 10 * currentNumber + currentSymbol.toInt() - '0'.toInt()
-                    if (index == expression.length - 1) {
-                        stack.add(currentNumber.toDouble())
+                    if (currentNumberIsNatural) {
+                        currentNumber = 10 * currentNumber + currentSymbol.toInt() - '0'.toInt()
+                    } else {
+                        currentNumber += (currentSymbol.toInt() - '0'.toInt()) * 10.0.pow(-decimalPlaceAfterDot)
+                        decimalPlaceAfterDot += 1
                     }
+                    if (index == expression.length - 1) {
+                        stack.add(currentNumber)
+                    }
+                }
+                currentSymbol == '.' -> {
+                    if (!wasDigit) {
+                        throw Exception("Incorrect dot.")
+                    }
+                    currentNumberIsNatural = false
                 }
                 currentSymbol == ' ' -> {
                     if (wasDigit) {
-                        stack.add(currentNumber.toDouble())
-                        currentNumber = 0
+                        stack.add(currentNumber)
+                        currentNumber = 0.0
                         wasDigit = false
+                        decimalPlaceAfterDot = 1
+                        currentNumberIsNatural = true
                     }
                 }
                 else -> throw Exception("UnexpectedSymbol")
             }
         }
         val resultingValue = stack.removeAt(stack.lastIndex)
-        if (!stack.isEmpty()) {
+        if (stack.isNotEmpty()) {
             throw Exception("Incorrect expression")
         }
         return resultingValue

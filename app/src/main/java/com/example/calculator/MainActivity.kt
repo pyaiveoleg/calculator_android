@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
 
         val expressionEnterField = findViewById<TextView>(R.id.expressionEnterField)
         val buttonsList = arrayOf(R.id.one, R.id.two, R.id.three, R.id.four, R.id.five, R.id.six, R.id.seven, R.id.eight, R.id.nine, R.id.zero,
-            R.id.plus, R.id.minus, R.id.multiply, R.id.divide, R.id.openBracket, R.id.closingBracket)
+            R.id.plus, R.id.minus, R.id.multiply, R.id.divide, R.id.openBracket, R.id.closingBracket, R.id.comma)
         for (buttonId in buttonsList) {
             val button = findViewById<Button>(buttonId)
             button.setOnClickListener {
@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
                     R.id.divide -> expressionEnterField.append("/")
                     R.id.openBracket -> expressionEnterField.append("(")
                     R.id.closingBracket -> expressionEnterField.append(")")
+                    R.id.comma -> expressionEnterField.append(".")
                 }
             }
         }

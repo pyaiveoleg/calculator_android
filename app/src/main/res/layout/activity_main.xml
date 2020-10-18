@@ -199,6 +199,15 @@
                 android:layout_height="wrap_content"
                 android:text="@string/divide" />
         </TableRow>
+
+
+        <Button
+            android:id="@+id/comma"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/comma" />
+
     </TableLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

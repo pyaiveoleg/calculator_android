@@ -1,6 +1,7 @@
 package com.example.calculator
 
 import java.lang.Exception
+import kotlin.math.pow
 
 class ConverterToPostfix {
     private val charParser = CharParser()
@@ -8,9 +9,11 @@ class ConverterToPostfix {
 
     fun convert(expression: String): String {
         val stack = mutableListOf<String>()
-        var currentNumber = 0
+        var currentNumber = 0.0
         var wasDigitBefore = false
         var wasOperatorBefore = true // expression must start with a digit
+        var decimalPlaceAfterDot = 1
+        var currentNumberIsNatural = true
 
         loop@ for ((index, symbol) in expression.withIndex()) {
             when {
@@ -19,19 +22,32 @@ class ConverterToPostfix {
                         throw Exception("Invalid expression")
                     }
                     wasDigitBefore = true
-                    currentNumber = 10 * currentNumber + symbol.toInt() - '0'.toInt()
+                    if (currentNumberIsNatural) {
+                        currentNumber = 10 * currentNumber + symbol.toInt() - '0'.toInt()
+                    } else {
+                        currentNumber += (symbol.toInt() - '0'.toInt()) * 10.0.pow(-decimalPlaceAfterDot)
+                        decimalPlaceAfterDot += 1
+                    }
 
                     if (index == expression.length - 1) {
                         resultingArray.add(currentNumber.toString())
                     }
                 }
                 symbol == ' ' -> continue@loop
+                symbol == '.' -> {
+                    if (!wasDigitBefore) {
+                        throw Exception("Incorrect dot.")
+                    }
+                    currentNumberIsNatural = false
+                }
                 else -> {
                     if (wasDigitBefore) {
                         resultingArray.add(currentNumber.toString())
                         wasOperatorBefore = false
-                        currentNumber = 0
+                        currentNumber = 0.0
+                        decimalPlaceAfterDot = 1
                         wasDigitBefore = false
+                        currentNumberIsNatural = true
                     }
 
                     when {

@@ -20,4 +20,5 @@
     <string name="backspace">delete</string>
     <string name="result">%1$s = %2$s</string>
     <string name="error">Error!</string>
+    <string name="comma">,</string>
 </resources>

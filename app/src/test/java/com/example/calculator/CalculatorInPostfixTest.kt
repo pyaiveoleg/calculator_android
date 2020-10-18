@@ -86,4 +86,22 @@ class CalculatorInPostfixTest {
         val calculator = CalculatorInPostfix()
         assertEquals(12.0, calculator.calculate("0 1+ 2* 22+2/"))
     }
+
+    @Test
+    fun calculate_oneRealNumber() {
+        val calculator = CalculatorInPostfix()
+        assertEquals(2.5, calculator.calculate("2.5"))
+    }
+
+    @Test
+    fun calculate_twoRealNumbers() {
+        val calculator = CalculatorInPostfix()
+        assertEquals(2.4, calculator.calculate("1.2 1.2 +"))
+    }
+
+    @Test
+    fun calculate_realAndNaturalNumbers() {
+        val calculator = CalculatorInPostfix()
+        assertEquals(15.0, calculator.calculate("2.5 6.0 *"))
+    }
 }
