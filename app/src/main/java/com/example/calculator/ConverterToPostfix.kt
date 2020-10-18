@@ -15,7 +15,7 @@ class ConverterToPostfix {
         var decimalPlaceAfterDot = 1
         var currentNumberIsNatural = true
 
-        loop@ for ((index, symbol) in expression.withIndex()) {
+        expression.forEachIndexed { index, symbol ->
             when {
                 charParser.isDigit(symbol) -> {
                     if (!wasOperatorBefore) {
@@ -33,7 +33,7 @@ class ConverterToPostfix {
                         resultingArray.add(currentNumber.toString())
                     }
                 }
-                symbol == ' ' -> continue@loop
+                symbol == ' ' -> return@forEachIndexed
                 symbol == '.' -> {
                     if (!wasDigitBefore) {
                         throw Exception("Incorrect dot.")
